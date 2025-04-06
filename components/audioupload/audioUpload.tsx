@@ -2,20 +2,31 @@
 import React from 'react'
 
 const AudioUpload = () => {
+    
     return (
         <div className='w-screen h-screen flex flex-row justify-center'>
             <form
                 className='flex flex-col justify-center items-center w-1/2 h-1/2 border m-auto'
                 onSubmit={(e) => {
                     e.preventDefault();
-                    const formData = new FormData(e.target as HTMLFormElement);
-                    fetch('/api/upload', {
-                        method: 'POST',
+                    const fileInput = document.getElementById("audioFile"); // Replace with your HTML element ID
+                    if(!fileInput){
+                        alert("no file selected");
+                        
+                    }else{
+                        const file = fileInput?.files[0];
+
+                        const formData = new FormData();
+                        formData.append("file", file);
+
+                        fetch("/api/upload", {
+                        method: "POST",
                         body: formData,
-                    })
-                        .then((response) => response.json())
-                        .then((data) => console.log('File uploaded successfully:', data))
-                        .catch((error) => console.error('Error uploading file:', error));
+                        })
+                        .then(response => response.json())
+                        .then(data => console.log(data))
+                        .catch(error => console.error(error));
+                    }
                 }}
             >
                 <div className='mb-15 px-15 w-5'>
